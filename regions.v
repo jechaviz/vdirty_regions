@@ -18,6 +18,27 @@ pub:
 	full_redraw bool
 }
 
+
+pub fn (rect Rect) normalized() Rect {
+	mut x := rect.x
+	mut y := rect.y
+	mut w := rect.w
+	mut h := rect.h
+	if w < 0 {
+		x += w
+		w = -w
+	}
+	if h < 0 {
+		y += h
+		h = -h
+	}
+	return Rect{x: x, y: y, w: w, h: h}
+}
+
+pub fn (rect Rect) is_empty() bool {
+	return !rect.valid()
+}
+
 pub fn (rect Rect) valid() bool {
 	return rect.w > 0 && rect.h > 0
 }
