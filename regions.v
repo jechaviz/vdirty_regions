@@ -67,7 +67,7 @@ pub fn touches(a Rect, b Rect, gap int) bool {
 		&& a.y <= b.y + b.h + g && a.y + a.h + g >= b.y
 }
 
-pub fn union(a Rect, b Rect) Rect {
+pub fn union_rect(a Rect, b Rect) Rect {
 	if !a.valid() {
 		return b
 	}
@@ -150,7 +150,7 @@ fn merge_into(mut regions []Rect, candidate Rect, gap int) {
 	mut i := 0
 	for i < regions.len {
 		if touches(regions[i], merged, gap) {
-			merged = union(regions[i], merged)
+			merged = union_rect(regions[i], merged)
 			regions.delete(i)
 			i = 0
 			continue
@@ -166,10 +166,10 @@ fn merge_closest_pair(mut regions []Rect) {
 	}
 	mut best_i := 0
 	mut best_j := 1
-	mut best_cost := union(regions[0], regions[1]).area() - regions[0].area() - regions[1].area()
+	mut best_cost := union_rect(regions[0], regions[1]).area() - regions[0].area() - regions[1].area()
 	for i := 0; i < regions.len; i++ {
 		for j := i + 1; j < regions.len; j++ {
-			cost := union(regions[i], regions[j]).area() - regions[i].area() - regions[j].area()
+			cost := union_rect(regions[i], regions[j]).area() - regions[i].area() - regions[j].area()
 			if cost < best_cost {
 				best_cost = cost
 				best_i = i
@@ -177,7 +177,7 @@ fn merge_closest_pair(mut regions []Rect) {
 			}
 		}
 	}
-	regions[best_i] = union(regions[best_i], regions[best_j])
+	regions[best_i] = union_rect(regions[best_i], regions[best_j])
 	regions.delete(best_j)
 }
 
